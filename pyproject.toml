@@ -1,0 +1,66 @@
+[project]
+name = "aegis-blueteam"
+version = "1.0.0"
+description = "Aegis-BlueTeam: Enterprise-grade Defensive Cybersecurity Suite featuring 100 blue-team Python tools, forensic analyzers, packet inspectors, and incident response automation."
+authors = [
+    { name = "Shreesha Anand Pujar", email = "86948511+ShreeshaAnandPujar@users.noreply.github.com" },
+]
+license = { text = "MIT" }
+readme = "README.md"
+requires-python = ">=3.11"
+keywords = ["cybersecurity", "blue-team", "threat-detection", "incident-response", "mitre-attack", "forensics"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Information Technology",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Security",
+]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+src = ["src"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "B", "I", "N", "UP", "S", "A", "C4", "SIM", "RUF"]
+ignore = [
+    "S101",   # assert used in tests
+    "S603",   # subprocess calls (needed in some monitor tools)
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101", "S105", "S106"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["project_*"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_any_generics = true
+no_implicit_reexport = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--strict-markers -v"
+markers = [
+    "integration: marks tests as integration tests (deselect with '-m not integration')",
+    "slow: marks tests as slow (deselect with '-m not slow')",
+]
+
+[tool.coverage.run]
+source = ["src"]
+omit = ["tests/*", "*/conftest.py"]
+
+[tool.coverage.report]
+fail_under = 80
+show_missing = true
+
+[tool.bandit]
+skips = ["B101"]  # assert_used — fine in test files
+exclude_dirs = ["tests", ".venv"]
